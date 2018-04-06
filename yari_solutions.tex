@@ -1,0 +1,607 @@
+\documentclass [11pt]{article}
+
+\usepackage {amsmath}
+
+\setlength{\textwidth}{6.25in}
+\setlength{\textheight}{8.75in}
+\setlength{\evensidemargin}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\parskip}{.05in}  
+\setlength{\parindent}{0.0in}  
+
+%\renewcommand{\textfraction}{0.01}
+%\renewcommand{\topfraction}{0.99}
+%\renewcommand{\bottomfraction}{0.99}
+%\renewcommand{\floatpagefraction}{0.99}
+
+
+\newcommand{\ttt}[1]{{\tt #1}}
+\newcommand{\code}[1]{{\tt #1}}
+
+\newcommand\R{{\sf R}}
+
+\begin{document}
+\begin{center}
+\Large YaRI - Yet another \R\ Introduction\\
+A self-help guide\\
+\vspace{0.25in}
+Answers to the Exercises\\
+\vspace{0.25in}
+\large  
+Written by Andreas Handel (ahandel@uga.edu) with the help of other sources. \\
+See the acknowledgment section of YaRI for more details.\\
+\normalsize 
+\vspace{0.25in}
+Last updated on \today \\
+\vspace{0.25in}
+\end{center}
+
+Note: There is almost always more than one right way of solving a problem/writing code in \R. The solutions below show just one way of doing it. You might have found another -- and maybe even more elegant -- way of doing it.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 2.1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This exercise has no solution.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 2.2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This exercise has no solution.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 2.3}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Close \R. Now re-start it. Right-click somewhere inside the R Console window and de-select \code{Buffered output} (only applies to R on Windows). This will make sure that the output produced by the commands below will be printed on the screen while the program runs. If you leave \code{Buffered output} selected, \R\ will only print the output once the whole program has finished -- which would be a problem here... Now, type  
+\vspace{-0.1in}
+\begin{verbatim}
+> n=1; while (1<2) {cat(n,"\n"); n=n+1;}
+\end{verbatim}
+\vspace{-0.1in}
+What is going on here? How long will the program run? Once you saw enough, use what you learned in the previous section and move on.
+
+{\bf Answer:} You wrote an infinite loop. Since the condition \code{1<2} is always satisfied, \R\ will continue to print an integer, increase by one, print the next one... Sometimes you might get your code stuck like this, then you can stop it by clicking on the stop symbol in the \R\ toolbar.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 4.1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This exercise has no solution.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 4.2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This exercise has no solution.
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Try the following commands and explain the different results.\\
+\textbf{Answer:}\\
+\verb >12^0-1/(log(1)+3) \\ 
+The first evaluation that \R\ does is \verb 12^0=1 . Then it does \code{log(1)+3=3}, and finally, \code{1-1/3=2/3}.
+
+\verb >(12^0-1)/(log(1)+3) \\
+Here, \verb (12^0-1)=0 . The denominator is still \code{log(1)+3=3}, so \code{0/3=0}. 
+
+\verb >12^0-1/log(1)+3 \\
+The first evaluation is again \verb 12^0=1 . The important calculation is \code{1/log(1)=Inf} since \code{log(1)=0}. Then \code{1-Inf+3=-Inf}. 
+
+\verb >(12^0-1)/log(1)+3 \\
+The first evaluation is \verb 12^0-1=0 . Since \code{log(1)=0}, we are having the situation of \code{0/0}. And since this is mathematically ill defined, \R\ returns \code{NaN} (not a number). Adding 3 to it doesn't change it (doing almost anything to \code{NaN} doesn't change it, see the help files and later sections in the guide). 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Create a vector \texttt{v=(1 5 9 13)} using \texttt{seq}.  
+Create a vector going from 1 to 5 in increments of 0.2 first by using  \texttt{seq},
+and then by using a command of the form \texttt{v=1+b*c(i:j)}. 
+
+\textbf{Answer:}
+\begin{verbatim}
+vec1=seq(1,13,by=4); vec1
+vec2=seq(1,5,by=0.2); vec2 #1st version
+vec3=1+0.2*c(0:20); vec3 #2nd version
+vec3-vec2 #should be all zeros if the 2 are the same
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.3}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Execute the following code 
+\begin{verbatim}
+> c=3; c=c(c,c,c(c,c)); c
+\end{verbatim}
+Explain why it's a really bad piece of code and come up with a better way to produce the same result.
+
+
+\textbf{Answer:} You obviously shoud not use the letter c for naming a variable, since it's a reserved function in \R. Nesting functions (i.e. the \code{c()} inside another \code{c()} can sometimes be confusing, it's sometimes better to include an extra step/variable. Lastly, assigning a value to a new variable with the same name as an already existing variable used in the same assignment can also lead to confusion. Here is a cleaner way to do it:
+\begin{verbatim}
+a=3; v1=c(a,a); v2=c(a,a,v1); v2
+\end{verbatim}
+Note: Sometimes you need/want to nest functions, reassign variables to itself, etc. But if you can avoid it, try to do so. At least initially in your programming career. 
+For this exercise, you could also make use of one of \R's built-in functions and do:
+\begin{verbatim}
+a=3; n=4; v=rep(a,n); v
+\end{verbatim}
+Another note: Instead of doing \code{rep(a,4)}, it's usually better to assign things like the length of a vector to a variable (e.g. \code{n}), and then use the variable name in the rest of the code. This makes it easier to change if you suddenly want a vector of a different length and don't want to go through all your code and change 4 to some other number.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.4}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:}  Use \code{runif(n)} to create a vector of 20 numbers, then find the subset of those numbers that is less than the mean.
+
+\textbf{Answer:}
+\begin{verbatim}
+a=runif(20); ma=mean(a); 
+b=(a<ma); a[b] #1st version
+b=which(a<ma); a[b]; #2nd version
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.5}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Find the \emph{positions} of the elements that are less than the mean of the vector you just created (e.g. if your vector were
+\verb+(0.1 0.9. 0.7 0.3)+ the answer would be \verb+(1 4)+).\\
+\textbf{Answer:}
+\begin{verbatim}
+a=runif(20); ma=mean(a); 
+b=which(a<ma); b
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.6}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Find a way to take only the elements in the odd positions (first, third, \ldots) of a vector of arbitrary length.
+
+\textbf{Answer:}
+\begin{verbatim}
+a=runif(20); 
+b=seq(1,length(a),by=2); a[b] #1st version
+b=seq(2,length(a),by=2); a[-b] #2nd version
+b=rep(c(1,0),length(a)/2); a[b] #3rd version
+\end{verbatim}
+The 2nd version simply creates a vector b for all the even numbers, and then uses the minus-sign trick to get all the values in a that are not at even positions. For the 3rd version, the trick is that zeros and ones can function both as numbers, but also as logicals (TRUE/FALSE) and when we do \code{a[b]}, \R\ is smart enough to understand that we want those zeros and ones interpreted as TRUE/FALSE and only returns us the values of a for which b is TRUE. Also note that you need to do a minor adjustment if a is odd - in that case, \code{length(a)/2} needs to be rounded.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.7}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Generate a vector of 1000 random numbers from a Gaussian distribution
+with mean=3, standard deviation=2. Use the functions \texttt{mean, sd} to compute
+the sample mean and standard deviation of the values in the vector, and \texttt{hist}
+to visualize the distribution. If you can't get these functions to work right away, read the help files (e.g. \code{help(hist)}).
+
+\textbf{Answer:}
+\begin{verbatim}
+a=rnorm(1000,mean=2,sd=3) 
+meana=mean(a); meana
+sda=sd(a); sda
+hist(a)
+\end{verbatim}
+The labels \code{mean} and \code{sd} when calling rnorm are not strictly needed, \code{rnorm(1000,2,3)} would be enough. But sometimes it's good to write out the names for the optional arguments, it makes understanding the code easier.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.8}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Create matrices \code{A} and \code{B} with dimensions 2$\times$3 and 3$\times$3 (fill them with numbers any way you want). 
+Try to use \code{rbind} and \code{cbind} to build larger matrices by combining the matrices with themselves and with each other. 
+Some of the combinations should not work. Read about the transpose command (\code{help(t)}), try it and see if you can use it to get those non-working combinations to work. Play with it and look at the matrices you create until you understand what exactly is going on. 
+
+\textbf{Answer:}
+\begin{verbatim}
+A=matrix(1,2,3); #2x3 matrix filled with 1s
+B=diag(2,3); #3x3 matrix with 2s on diagonal
+C1=cbind(A,A); #works, new matrix 2x6
+C2=rbind(A,A); #works, new matrix 4x3
+C3=rbind(A,B); #works, new matrix is 5x3
+C4=rbind(B,A); #works, new matrix is 5x3
+C5=cbind(A,B); #doesn't work
+C6=cbind(B,A); #doesn't work
+C7=cbind(t(A),B); #works, new matrix is 3x5
+\end{verbatim}
+Just some possibilities, others exist. Make sure you understand why things do or do not work.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.9}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Use \textbf{runif} to construct a 5$\times $5 matrix of random numbers with a uniform distribution between 0 and 1. Extract from it the second row; the second column; and the 3$\times $3 matrix of the values that are not at the margins (i.e. not in the first or last row, or first or last column). Use \code{seq} to replace the values in the first row by \texttt{2 5 8 11 14}. 
+
+\textbf{Answer:}\\
+\begin{verbatim}
+B=matrix(runif(25),5,5); B
+B[2,]
+B[,2]
+B[2:4,2:4]
+B[1,]=seq(2,14,by=3); B
+\end{verbatim}
+I nested the function \code{runif()} inside the function \code{matrix()}. As mentioned above, this is sometimes ok if no confusion arises, but often it would be better to split them, for instance \code{v=runif(25); B=matrix(v,5,5)}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.10}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Answer:} Since this involves using Excel/OpenOffice, I can't show a solution.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.11}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Create any matrix filled with numbers. Set at least one entry in the matrix to NA. Compute the mean over all rows, over all columns and over the whole matrix. Make sure you deal properly with the \code{NA} value. Read \code{?mean} to see how to deal with \code{NA} values and how to do means of rows or columns.
+
+\textbf{Answer:}
+\begin{verbatim}
+A=matrix(runif(25),5,5); A 
+A[3,3]=NA; A
+rowMeans(A,na.rm=TRUE)
+colMeans(A,na.rm=TRUE)
+mean(A,na.rm=TRUE)
+\end{verbatim}
+\code{A} has the data type \code{matrix} (you can check with \code{class(A)}). On this data type, the function \code{mean} computes the mean over all entries in the matrix. See the next exercise for more on that.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.12}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:}
+Write an \R\ script that automatically creates a 4x5 matrix, writes it to a file, reads it from the file, replaces an entry with \code{NA}, computes the mean and sum of the matrix, and prints the values onto the screen. Note that you might want to use \code{write.table} and \code{read.table} instead of write/read CSV. If you use the latter, you might have to manipulate the matrix a bit once you load it.
+
+
+\textbf{Answer:}
+\begin{verbatim}
+A=matrix(runif(20),4,5);
+write.table(A,'test.txt');
+B=read.table('test.txt');
+B[2,3]=NA;
+sumB=sum(B,na.rm=TRUE);
+meanB=sumB/19; #divide by 19 since we ignore the NA entry and don't coun't it
+cat("Mean is",meanB,"Sum is",sumB,"\n");
+\end{verbatim}
+Note that \code{A} is of type \code{matrix}, but once you reload the matrix from a file, it has a different type called \code{data.frame}. Check using \code{class()}. Some functions in \R\ behave differently, depending on the type of the argument. If you do \code{mean(B,na.rm=TRUE)} as in the previous exercise, it does not return the mean over all entries, instead \R\ returns the mean over all columns. Above we simply computed the mean ``by hand''. But sometimes, if you need to use a more complicated \R\ function, you can't do that easily. In that case, you first need to convert the variable from one type into another. This is relatively simple. For instance, here you could do the following
+\begin{verbatim}
+B2=as.matrix(B); #converts B to type matrix
+meanB=mean(B2,na.rm=TRUE)
+\end{verbatim}
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.13}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:}
+Modify your script such that a {\bf random} entry is replaced with \code{NA}. Hint: Think about a way to produce 2 random integers between 1 and the number of columns/rows of the matrix. Then use those 2 numbers in \code{B[rownum,colnum]=NA}. There are many different possibilities to solve this.
+
+
+\textbf{Answer:} Same as previous exercise, but the command \code{B[2,3]=NA} is replaced by
+\begin{verbatim}
+Bdim=dim(B);  
+rownum=sample(1:Bdim[1],1);
+colnum=sample(1:Bdim[2],1);
+B[rownum,colnum]=NA
+\end{verbatim}
+Explanation: \code{dim(B)} gives the dimensions (the size) of the matrix, i.e. 4 and 5. Doing it this way is more general than using the values 4 and 5 in the \code{sample} command.
+
+Here is a bit less elegant alternative of doing it
+\begin{verbatim}
+Bdim=dim(B);  
+Brandom=runif(2)*Bdim; 
+Bintrand=ceiling(Brandom); 
+B[Bintrand[1],Bintrand[2]]=NA
+\end{verbatim}
+Explanation: The two numbers describing the dimensions of the matrix which are stored in \code{Bdim} are multiplied by 2 random numbers between zero and one using the command \code{runif}. Since the result is not an integer, we need to round. Using \code{round} is not good, since it could produce zeros. We can use the \code{ceiling} command instead since it always rounds upwards. We then get 2 random numbers between 1 and the number of rows/columns. We use these numbers to select an entry and set it to NA.
+
+Note: There are usually many ways in \R\ of doing the same thing. If you have a choice, you usually want to program such that 1) It is easy to write/understand, 2) it is as general as possible, and 3) it executes as fast as possible. Sometimes these goals are in conflict. A good solution for this situation is to first write the code in a simple form, then write it in the more general form, and lastly, once you need to do serious number crunching, rewrite it in as fast a version as possible -- but leave the simple/general version in the code as comments. Then, when you later revisit your program, you understand quickly what is going on.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.14}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:}
+The axes in plots are scaled automatically, but the outcome is
+not always ideal (e.g. if you want several graphs with exactly the
+same axes limits). You can control scaling using the \code{xlim} and \code{ylim}
+arguments, e.g. \code{plot(x,y,xlim=c(x1,x2))} will draw the graph with the $x$-axis running from \code{x1} to \code{x2}, and using 
+\code{ylim=c(y1,y2)} within the \code{plot()} command will 
+do the same for the $y$-axis. Create two vectors \code{x, y}, plot them, and play around with the $x$ and $y$-axes. 
+
+\textbf{Answer:} A few examples are shown:
+\begin{verbatim}
+x=seq(3,8,length.out=100);
+y=5*x+3;
+plot(x,y,type='l');
+plot(x,y,type='l',xlim=c(0,10));
+plot(x,y,type='l',ylim=c(0,50));
+plot(x,y,type='l',xlim=c(4,7),ylim=c(0,100));
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.15}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Answer:} Exercise should be self-explanatory. See the solution to the next exercise for some more information on the \code{par()} command.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.16}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:}
+Use \code{?par} to read about other plot control parameters
+that can be set using \code{par()} (feel free to just skim --- this is one of the
+longest help files in the whole \R\ system). Then draw a $2 \times 2$ set of plots,
+each showing the line $y=5x+3$ with x running from 3 to 8, but with 4 different
+line styles and 4 different line colors. Make sure you are plotting lines, not markers/symbols!
+
+\textbf{Answer:}
+\begin{verbatim}
+x=seq(3,8,length.out=100);
+y=5*x+3;
+par(mfcol=c(2,2));
+plot(x,y,col='red',lty=1,type='l');
+plot(x,y,col='green',lty=2,type='l');
+plot(x,y,col='blue',lty=3,type='l');
+plot(x,y,col='black',lty=4,type='l');
+\end{verbatim}
+Again, there are many different ways of doing this plot.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.17}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Modify \textbf{yari-examplecode.r} so that at the very end it saves the plot as a .png file. In Windows you can do
+this with \code{savePlot()}, otherwise with \code{dev.print()}. Use \code{?savePlot}, \code{?dev.print} to read about these functions.  
+
+\textbf{Answer:} 
+Here's one way of doing this, using the \code{dev.copy()} command. Add this after you have added everything to your figure.
+\begin{verbatim}
+dev.copy(device=png,width=600,height=600,file="figure.png"); dev.off();
+\end{verbatim}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.18}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:}
+For the code in the last section, replace the growing array \code{popsize} with a fixed array that is initially empty, and then fill the array with the results as the simulation runs.
+
+\textbf{Answer:} Replace \code{popsize=popnow} with \code{popsize=rep(0,51)}, which creates an array of size 1x51 full of zeros. Then inside the loop, replace \code{popsize=c(popsize,popnow)} with \code{popsize[i+1]=popnow}. Note that the array needs to be of size 51 since we have the starting condition and then the loop runs over 50 numbers (1 to 50). Since the first entry in popsize is the starting condition, we also need to use $i+1$ inside the loop.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.19}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:}
+Imagine that while doing fieldwork in some 
+distant land you and your friend have picked up a parasite that grows 
+exponentially until treated. Your case is more severe than your friend's: 
+on return there are 400 of them in you, and only 120 in your 
+friend. However, your field-hardened immune system is more effective. In 
+your body the number of parasites grows by 10 percent each day, while in 
+your friend's it increases by 20 percent each day. Write a script file that uses a for-loop to compute the 
+number of parasites in your body and your friend's over the next 30 days, 
+and draws a single plot of both with the y-axis on log-scale. 
+
+\textbf{Answer:}
+\begin{verbatim}
+youtotal=rep(0,31);
+friendtotal=rep(0,31);
+youtotal[1]=400;
+friendtotal[1]=120;
+for (d in 1:30)
+{
+  youtotal[d+1]=youtotal[d]+0.1*youtotal[d];
+  friendtotal[d+1]=friendtotal[d]+0.2*friendtotal[d];
+}
+plot(youtotal,log="y",col="blue",type="l",ylab="Parasites"
+,xlab="Days",xlim=c(1,31),ylim=c(100,1e5));
+lines(friendtotal,col="red");
+legend("topleft",c("You","Friend"),col = c("blue","red"),lwd=2)
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.20}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Write a script file that uses 
+a while-loop to compute the number of parasites in your body and your 
+friend's so long as you are sicker than him (i.e. so long as you have more parasites) and stops when your friend becomes sicker than you. 
+Then print out the day at which that happens.
+
+
+\textbf{Answer:} Since we now don't know for how many steps we need to record the data, a while loop is better. 
+It is also better to record the parasite loads in a dynamically growing vector. Alternatively, we could just keep track of the current numbers and drop the \code{[n]} indexes.
+\begin{verbatim}
+youtotal=400;
+friendtotal=120;
+n=1;
+while (youtotal[n]>friendtotal[n])
+{
+  youtotal[n+1]=youtotal[n]+0.1*youtotal[n];
+  friendtotal[n+1]=friendtotal[n]+0.2*friendtotal[n];
+  n=n+1;
+}
+cat("Your friend's parasites exceed your parasites on day ",n,"\n")
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.21}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:}
+Write a script file that uses for-loops to create the 
+following 5$\times $5 matrix A.  
+\[
+{\begin{array}{*{20}c}
+ 0 \hfill & 1 \hfill & 2 \hfill & 3 \hfill & 4 \hfill \\
+ {0.1} \hfill & 0 \hfill & 0 \hfill & 0 \hfill & 0 \hfill \\
+ 0 \hfill & {0.2} \hfill & 0 \hfill & 0 \hfill & 0 \hfill \\
+ 0 \hfill & 0 \hfill & {0.3} \hfill & 0 \hfill & 0 \hfill \\
+ 0 \hfill & 0 \hfill & 0 \hfill & {0.4} \hfill & 0 \hfill \\
+\end{array} }
+\]
+
+
+\textbf{Answer:} There are many ways to create this matrix (both using loops and without). Here is one way
+\begin{verbatim}
+A=matrix(0,5,5);
+for (n in 1:4)
+{
+ A[1,n+1]=n;
+ A[n+1,n]=n/10;
+}
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.22}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Write a script file that creates 1000 random numbers. Write this in several ways: \\
+1) Use a while-loop and dynamically add the newly created random number to a vector.\\
+2) same as 1), but use a for-loop. \\
+3) same as 1, but pre-allocate the result vector (i.e. create a vector of length 1000 that is filled with zeros) and then write the newly created random number into the appropriate place in the vector. \\
+4) Use the vectorization ability of \R, i.e. the fact that \R\ can produce as many random numbers as you want with a single command.
+
+
+\textbf{Answer:}\\
+\begin{verbatim}
+V1=runif(1); n=1; while (n<1E4) {V1=c(V1,runif(1)); n=n+1} 
+V2=runif(1); for (n in 2:1E4) {V2=c(V2,runif(1))} 
+V3=rep(0,1e4); n=1; while (n<1E4) {V3[n]=runif(1); n=n+1} 
+V4=runif(1e4);
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.23}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} It is often important to write code that runs as fast as possible. \R\ has some built-in functions that can help you test the speed of your code. For the script in the last exercise, add commands that compute the time \R\ needs for each of the different ways of creating the random numbers. You can for instance use a function such as \code{proc.time()} or similar.
+
+
+\textbf{Answer:} Shown here for the first method, use the same approach for all four methods to compare speed
+\begin{verbatim}
+tstart=proc.time();
+V1=runif(1); n=1; while (n<1E4) {V1=c(V1,runif(1)); n=n+1} 
+tend=proc.time();
+tdiff=tend-tstart;
+cat('Seconds taken',tdiff[3],'\n');
+\end{verbatim}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.24}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Write a script that defines a function \texttt{mymax} which takes as input a single
+matrix, and returns a vector with components that contain the maximum value in each column of the matrix. Hint: You could use a loop or you might find the command \code{apply()} helpful.
+
+
+\textbf{Answer:} Using a loop for this one:
+\begin{verbatim}
+mymax=function(M)
+{
+ Mrows=dim(M)[2] #number of rows
+ maxvec=rep(0,Mrows); #empty vector
+ for (n in 1:Mrows)
+ {
+   maxvec[n]=max(M[,n]) #max of every column
+ }
+ return(maxvec)
+} #end function
+
+#main program
+A=matrix(runif(20),5,4);
+colmax=mymax(A)
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.25}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Extend your function from the last exercise so that one can specify if it should return the maximum for each column or each row of the matrix. Hint: Write a function that has as input the matrix and another variable which defines what procedure should be done. E.g. 
+\code{mymax(M,cl)}, where \code{cl=1} or \code{cl=TRUE} returns the maximum of each column, and if \code{cl=0} or \code{cl=FALSE}, the maximum of each row is returned. Inside the function, you need statements of the form \code{if (cl==1)} to distinguish between the cases.
+
+
+\textbf{Answer:} Using the function \code{apply()} for this one. One could do it a bit more compact, instead of setting cl=0 or cl=1, just set it to 1 and 2 and use it directly in the \code{apply} statement, but I wanted to show how to do the \code{if} statements. 
+\begin{verbatim}
+mymax=function(M,cl)
+{
+  if (cl==1) {dir=2} #max of all cols 
+  if (cl==0) {dir=1} #max of all rows
+  maxvec=apply(M,dir,max) 
+  return(maxvec)
+} #end function
+
+#main program
+A=matrix(runif(20),5,4);
+cl=1; colmax=mymax(A,cl)
+cl=0; rowmax=mymax(A,cl)
+\end{verbatim}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercise 5.26}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Question:} Extend your function further such that it tests if the first entry is really a matrix, and the second entry is really either 0/1 or TRUE/FALSE. If not, make the function print an error message.
+
+
+\textbf{Answer:}
+\begin{verbatim}
+mymax=function(M,cl)
+{
+  #if everything is ok, do function
+  if ((cl==0 || cl==1) && is.matrix(M)) 
+  {
+      if (cl==1) {dir=2} #max of all cols 
+      if (cl==0) {dir=1} #max of all rows
+      maxvec=apply(M,dir,max) 
+      return(maxvec)
+  }
+  #this occurs if above code didn't execute
+  cat('Invalid function call, check syntax \n');
+  return('Invalid function call, check syntax');
+} #end function
+
+#main program
+A=matrix(runif(20),5,4); 
+cl=1; colmax=mymax(A,cl) #this one works
+cl=3; rowmax=mymax(A,cl) #this one produces an error
+\end{verbatim}
+Note that the \code{cat} line prints an error to the screen, the return statement below it returns the error message back to the calling function. For error checks in your own code, a simple printed error message is often easier, if you want to share code with others, you need to do it more properly, such as returning an error message.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsubsection*{Exercise 5.27}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\textbf{Question:}
+% Write a script using \ttt{lsoda} to solve the classic epidemic SIR model (S=susceptibles, I=Infecteds, R=Recovered) 
+%\begin{eqnarray}
+%  \frac{dS}{dt} &=&  - \beta SI \\
+%  \frac{dI}{dt} &=& \beta SI - \gamma I \\
+%  \frac{dR}{dt} &=& \gamma I \\ 
+%\end{eqnarray}
+%The parameters $\beta$ and $\gamma$ represent the rate of infection and the rate of recovery, respectively. 
+%Choose $\beta=5e-3$, $\gamma=2$ and as initial conditions, set $S=1000$, $I=1$ and $R=0$. Run the model for 30 days and plot $S$, $I$ and $R$ as a function of time. Try plotting both on a linear and log scale. You should see $S$ going down, $I$ going up and then down again, and $R$ going up. Explore how the dynamics changes as you change the parameters $\beta$ and $\gamma$. 
+%
+%
+%\textbf{Answer:}
+%\begin{verbatim}
+%rm(list=ls()) 
+%graphics.off() 
+%library(deSolve)  
+%
+%#begin function that specifies the ODEs
+%odeequations=function(t,y,pars) 
+%{ 
+%	S=y[1]; In=y[2]; R=y[3]; 
+%	b=pars[1]; g=pars[2]; 
+%	#ODEs written right into the return list 
+%	#makes the program shorter but less easy to follow
+%	return(list(c(-b*S*In,b*S*In-g*In,g*In)));  
+%} #end function specifying the ODEs
+%                                                                                                      
+%#main program
+%timevec=seq(0,30,by=0.1); 
+%b=5e-3; g=2;
+%Y0=c(1000, 1, 0);   
+%out=lsoda(Y0,timevec,odeequations,c(b,g));
+%#plot results
+%plot(out[,1],out[,2],type="l",col="green",lwd=2,log="",xlim=c(0,30),ylim=c(1,1000))
+%lines(out[,1],out[,3],type="l",col="red",lwd=2)
+%lines(out[,1],out[,4],type="l",col="blue",lwd=2)
+%legend("right",c("S","I","R"),col = c("green","red","blue"),lwd=2)
+%\end{verbatim}
+%Write \code{log="y"} instead of \code{log=""} to plot the y-axis on a log scale.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsubsection*{Project}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\textbf{Question:}
+%
+%\textbf{Answer:} See the file \code{yari-project-solution.r}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
